@@ -7,7 +7,7 @@ from property.models import Flat
 def format_price(value):
     try:
         return int(value)
-    except (TypeError, ValueError) as err:
+    except (TypeError, ValueError):
         return None
 
 
