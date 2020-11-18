@@ -5,10 +5,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Flat(models.Model):
-    owner = models.CharField("ФИО владельца", max_length=200)
-    owners_phonenumber = models.CharField("Номер владельца", max_length=20)
-    owner_pure_phone = PhoneNumberField('Нормализованный номер владельца', null=True, blank=True)
-
     created_at = models.DateTimeField("Когда создано объявление", default=timezone.now, db_index=True)
     
     description = models.TextField("Текст объявления", blank=True)
@@ -46,3 +42,14 @@ class Claim(models.Model):
 
     def __str__(self):
         return f"{self.user}: {self.flat}"
+
+
+class Owner(models.Model):
+    owner = models.CharField("ФИО владельца", max_length=200, db_index=True)
+    owners_phonenumber = models.CharField("Номер владельца", max_length=20, db_index=True)
+    owner_pure_phone = PhoneNumberField('Нормализованный номер владельца', null=True, blank=True, db_index=True)
+
+    flats = models.ManyToManyField(Flat, verbose_name="Квартиры в собственности", related_name="owners")
+
+    def __str__(self):
+        return f"{self.owner}"
